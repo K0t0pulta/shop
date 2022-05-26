@@ -40,7 +40,6 @@
             </a>
           </li>
           <li class="pagination__item">
-            // eslint-disable-next-line max-len
             <a class="pagination__link pagination__link--arrow" href="#" aria-label="Следующая страница">
               <svg width="8" height="14" fill="currentColor">
                 <use xlink:href="#icon-arrow-right"></use>
@@ -77,9 +76,5 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-}
-img {
-  width: fit-content;
-  height: fit-content;
 }
 </style>
