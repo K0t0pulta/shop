@@ -1,7 +1,8 @@
 <template>
   <ul class="catalog__pagination pagination">
     <li class="pagination__item">
-      <a class="pagination__link pagination__link--arrow pagination__link--disabled" aria-label="Предыдущая страница">
+      <a class="pagination__link pagination__link--arrow " href="#" aria-label="Предыдущая страница"
+      @click.prevent="paginate(page - 1)" :class="{'pagination__link--disabled': page === 1}">
         <svg width="8" height="14" fill="currentColor">
           <use xlink:href="#icon-arrow-left"></use>
         </svg>
@@ -13,7 +14,8 @@
       </a>
     </li>
     <li class="pagination__item">
-      <a class="pagination__link pagination__link--arrow" href="#" aria-label="Следующая страница">
+      <a class="pagination__link pagination__link--arrow" href="#" aria-label="Следующая страница"
+      @click.prevent="paginate(page + 1)" :class="{'pagination__link--disabled': page === pages}">
         <svg width="8" height="14" fill="currentColor">
           <use xlink:href="#icon-arrow-right"></use>
         </svg>
@@ -24,10 +26,7 @@
 
 <script>
 export default {
-  model: {
-    prop: 'page',
-    event: 'paginate'
-  },
+  emits: ['update:page'],
   props: {
     page: Number,
     count: Number,
@@ -40,7 +39,8 @@ export default {
   },
   methods: {
     paginate(page) {
-      this.$emit('paginate', page);
+      if (page > this.pages || page < 1) return;
+      this.$emit('update:page', page);
     }
   }
 };
