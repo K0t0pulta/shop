@@ -1,48 +1,31 @@
 <template>
-<li class="catalog__item" :product="product">
-            <a class="catalog__pic" href="#">
-              <img :src="product.img" :alt="product.title">
-            </a>
-            <h3 class="catalog__title">
-              <a href="#">
-                {{product.title}}
-              </a>
-            </h3>
-            <span class="catalog__price">
-              {{product.price}} ₽
-            </span>
-            <ul class="colors colors--black">
-              <li class="colors__item">
-                <label class="colors__label" for="inputColor1">
-                  <input class="colors__radio sr-only" type="radio" value="#73B6EA" id="inputColor1" v-model="color">
-                  <span class="colors__value" style="background-color: #73B6EA;">
-                  </span>
-                </label>
-              </li>
-              <li class="colors__item">
-                <label class="colors__label" for="inputColor2">
-                  <input class="colors__radio sr-only" type="radio" value="#8BE000" id="inputColor2" v-model="color">
-                  <span class="colors__value" style="background-color: #8BE000;">
-                  </span>
-                </label>
-              </li>
-              <li class="colors__item">
-                <label class="colors__label" for="inputColor3">
-                  <input class="colors__radio sr-only" type="radio" value="#222" id="inputColor3" v-model="color">
-                  <span class="colors__value" style="background-color: #222;">
-                  </span>
-                </label>
-              </li>
-            </ul>
-          </li>
+  <li class="catalog__item" >
+    <a class="catalog__pic" href="#">
+      <img :src="product.img" :alt="product.title">
+    </a>
+    <h3 class="catalog__title">
+    <a href="#">
+      {{product.title}}
+    </a>
+    </h3>
+    <span class="catalog__price">
+      {{product.price}} ₽
+    </span>
+    <ColorPicker :colors="colors" />
+  </li>
 </template>
 
 <script>
+import ColorPicker from './ColorPicker.vue';
+
 export default {
   props: ['product'],
+  components: {
+    ColorPicker
+  },
   data() {
     return {
-      color: '#73B6EA'
+      colors: ['#73B6EA', '#8BE000', '#222']
     };
   }
 };
