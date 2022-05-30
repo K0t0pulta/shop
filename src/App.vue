@@ -10,7 +10,7 @@
     </div>
 
     <div class="content__catalog">
-      <ProductFilter :price-from="filterPriceFrom" :price-to="filterPriceTo" :category-id="filterCategoryID"/>
+      <ProductFilter :price-from="filterPriceFrom" :price-to="filterPriceTo" :categoryID="filterCategoryID"/>
 
         <section class="catalog">
           <ProductList :products="products"/>

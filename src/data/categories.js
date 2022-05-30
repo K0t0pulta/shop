@@ -13,6 +13,6 @@ export default [
   },
   {
     id: 4,
-    titile: 'PC'
+    title: 'PC'
   }
 ];

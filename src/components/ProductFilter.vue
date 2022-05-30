@@ -2,15 +2,15 @@
       <aside class="filter">
         <h2 class="filter__title">Фильтры</h2>
 
-        <form class="filter__form form" action="#" method="get">
+        <form class="filter__form form" action="#" method="get" @submit.prevent="submit">
           <fieldset class="form__block">
             <legend class="form__legend">Цена</legend>
             <label class="form__label form__label--price" for="min-price">
-              <input class="form__input" type="text" name="min-price" id="min-price">
+              <input class="form__input" type="text" name="min-price" id="min-price" v-model.number="priceStart">
               <span class="form__value">От</span>
             </label>
             <label class="form__label form__label--price" for="max-price">
-              <input class="form__input" type="text" name="max-price" id="max-price">
+              <input class="form__input" type="text" name="max-price" id="max-price" v-model.number="priceEnd">
               <span class="form__value">До</span>
             </label>
           </fieldset>
@@ -18,9 +18,9 @@
           <fieldset class="form__block">
             <legend class="form__legend">Категория</legend>
             <label class="form__label form__label--select" for="select-cat">
-              <select class="form__select" type="text" name="category" id="select-cat">
+              <select class="form__select" type="text" name="category" id="select-cat" v-model.number="catID">
                 <option value="0">Все категории</option>
-                <option></option>
+                <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{cat.title}}</option>
               </select>
             </label>
           </fieldset>
@@ -151,7 +151,23 @@ import categories from '../data/categories';
 export default {
   props: ['priceFrom', 'priceTo', 'categoryID'],
   data() {
-    return categories;
+    return {
+      priceStart: 0,
+      priceEnd: 0,
+      catID: 0
+    };
+  },
+  computed: {
+    categories() {
+      return categories;
+    }
+  },
+  method: {
+    submit() {
+      this.$emit('update:priceFrom', this.priceStart);
+      this.$emit('update:priceTo', this.priceEnd);
+      this.$emit('update:categoryID', this.catID);
+    }
   }
 };
 </script>
