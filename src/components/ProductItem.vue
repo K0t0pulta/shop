@@ -11,7 +11,7 @@
     <span class="catalog__price">
       {{product.price}} ₽
     </span>
-    <ColorPicker :colors="colors" />
+    <ColorPicker/>
   </li>
 </template>
 
@@ -22,11 +22,6 @@ export default {
   props: ['product'],
   components: {
     ColorPicker
-  },
-  data() {
-    return {
-      colors: ['#73B6EA', '#8BE000', '#222']
-    };
   }
 };
 </script>
