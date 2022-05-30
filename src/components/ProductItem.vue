@@ -11,7 +11,7 @@
     <span class="catalog__price">
       {{product.price}} ₽
     </span>
-    <ColorPicker/>
+    <ColorPicker :product="product"/>
   </li>
 </template>
 
