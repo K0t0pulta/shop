@@ -5,7 +5,8 @@
       :key="color"
       >
         <label class="colors__label" :for="color + product.id">
-          <input class="colors__radio sr-only" type="radio" :value="color" :id="color + product.id" v-model="picked" name="color">
+          <input class="colors__radio sr-only" type="radio" :value="color" :id="color + product.id" v-model="picked"
+          :name="'color' + product.id">
           <span class="colors__value" :style="{'background-color': color}">
           </span>
         </label>
