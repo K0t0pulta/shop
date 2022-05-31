@@ -10,7 +10,7 @@
     </div>
 
     <div class="content__catalog">
-      <ProductFilter :price-from="filterPriceFrom" :price-to="filterPriceTo" :categoryID="filterCategoryID"/>
+      <ProductFilter v-model:priceFrom="filterPriceFrom" v-model:priceTo="filterPriceTo" v-model:categoryID="filterCategoryID"/>
 
         <section class="catalog">
           <ProductList :products="products"/>
