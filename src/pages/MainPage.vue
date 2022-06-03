@@ -8,14 +8,11 @@
         152 товара
       </span>
     </div>
-
     <div class="content__catalog">
-      <ProductFilter v-model:priceFrom="filterPriceFrom" v-model:priceTo="filterPriceTo" v-model:categoryID="filterCategoryID"/>
-
+      <ProductFilter v-model:priceFrom="filterPriceFrom" v-model:priceTo="filterPriceTo" v-model:categoryId="filterCategoryID"/>
         <section class="catalog">
-          <ProductList :products="products" @goto-page="(pageName, pageParams) => $emit('gotoPage', pageName, pageParams)"/>
-          <BasePaginationVue v-model:page="page" :count="countProducts" :per-page="productsPerPage"
-          />
+          <ProductList :products="products"/>
+          <BasePaginationVue v-model:page="page" :count="countProducts" :per-page="productsPerPage"/>
         </section>
     </div>
   </main>
@@ -28,11 +25,11 @@ import BasePaginationVue from '@/components/BasePagination.vue';
 import ProductFilter from '@/components/ProductFilter.vue';
 
 export default {
-  emits: ['gotoPage'],
+  name: 'MainPage',
   components: {
     ProductList,
-    BasePaginationVue,
-    ProductFilter
+    ProductFilter,
+    BasePaginationVue
   },
   data() {
     return {
@@ -53,7 +50,7 @@ export default {
         filteredProducts = filteredProducts.filter((product) => product.price < this.filterPriceTo);
       }
       if (this.filterCategoryID) {
-        filteredProducts = filteredProducts.filter((product) => product.categoryID === this.filterCategoryID);
+        filteredProducts = filteredProducts.filter((product) => product.categoryId === this.filterCategoryID);
       }
       return filteredProducts;
     },

@@ -1,15 +1,15 @@
 <template>
   <li class="catalog__item" >
-    <a class="catalog__pic" href="#" @click.prevent="$emit('gotoPage', 'product', {productId: product.id, categoryId: product.categoryId})">
+    <router-link class="catalog__pic" :to="{name: 'product', params: {id: product.id}}">
       <img :src="product.img" :alt="product.title">
-    </a>
+    </router-link>
     <h3 class="catalog__title">
     <a href="#">
       {{product.title}}
     </a>
     </h3>
     <span class="catalog__price">
-       {{$filters.numberFormat(product.price)}}  ₽
+        {{numberFormat}}  ₽
     </span>
     <ColorPicker :product="product"/>
   </li>
@@ -20,9 +20,13 @@ import ColorPicker from '@/components/ColorPicker.vue';
 
 export default {
   props: ['product'],
-  emits: ['gotoPage'],
   components: {
     ColorPicker
+  },
+  computed: {
+    numberFormat() {
+      return Intl.NumberFormat().format(this.product.price);
+    }
   }
 };
 </script>

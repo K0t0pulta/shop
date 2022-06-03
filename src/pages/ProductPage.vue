@@ -1,16 +1,16 @@
 <template>
-      <main class="content container">
+  <main class="content container">
     <div class="content__top">
       <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
-          <a class="breadcrumbs__link" href="#" @click.prevent="$emit('gotoPage', 'main')">
+          <router-link :to="{name: 'home'}" class="breadcrumbs__link">
             Каталог
-          </a>
+          </router-link>
         </li>
         <li class="breadcrumbs__item">
-          <a class="breadcrumbs__link" href="#">
+          <router-link :to="{name: 'home'}" class="breadcrumbs__link" >
             {{category.title}}
-          </a>
+          </router-link>
         </li>
         <li class="breadcrumbs__item">
           <a class="breadcrumbs__link">
@@ -35,7 +35,7 @@
         <div class="item__form">
           <form class="form" action="#" method="POST">
             <b class="item__price">
-              {{$filters.numberFormat(product.price)}} ₽
+              {{numberFormat}} ₽
             </b>
 
           <fieldset class="form__block">
@@ -156,7 +156,8 @@
                   </svg>
                 </button>
                 <label for="productsForPurchase">
-                <input type="text" value="1" name="count" id="productsForPurchase">
+                <input type="text" name="count" id="productsForPurchase">
+                {{$store.state.cartProducts.length}}
                 </label>
 
                 <button type="button" aria-label="Добавить один товар">
@@ -243,19 +244,16 @@ import products from '@/data/products';
 import categories from '@/data/categories';
 
 export default {
-  props: ['pageParams'],
-  data() {
-    return {
-      productId: this.pageParams.productId,
-      categoryId: this.pageParams.categoryId
-    };
-  },
+  name: 'ProductPage',
   computed: {
     product() {
-      return products.find((item) => item.id === this.productId);
+      return products.find((item) => item.id === +this.$route.params.id);
     },
     category() {
-      return categories.find((category) => category.id === this.categoryId);
+      return categories.find((item) => item.id === +this.product.categoryId);
+    },
+    numberFormat() {
+      return Intl.NumberFormat().format(this.product.price);
     }
   }
 };

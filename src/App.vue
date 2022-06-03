@@ -1,39 +1,17 @@
 <template>
-  <component :is="currentComponent" :page-params="currentPageParams"
-  @goto-page="(pageName, pageParams) => gotoPage(pageName, pageParams)"></component>
+  <div><HeaderBlock/></div>
+  <router-view></router-view>
+  <div><FooterBlock/></div>
 </template>
 
 <script>
-import MainPage from '@/pages/MainPage.vue';
-import ProductPage from '@/pages/ProductPage.vue';
-import NotFoundPage from '@/pages/NotFoundPage.vue';
-
-const routes = {
-  main: 'MainPage',
-  product: 'ProductPage'
-};
+import HeaderBlock from '@/components/HeaderBlock.vue';
+import FooterBlock from '@/components/FooterBlock.vue';
 
 export default {
-  components: { MainPage, ProductPage, NotFoundPage },
-  data() {
-    return {
-      currentPage: 'main',
-      currentPageParams: {
-        productId: '1',
-        categoryId: ''
-      }
-    };
-  },
-  methods: {
-    gotoPage(pageName, pageParams = {}) {
-      this.currentPage = pageName;
-      this.currentPageParams = pageParams;
-    }
-  },
-  computed: {
-    currentComponent() {
-      return routes[this.currentPage] || 'NotFoundPage';
-    }
+  components: {
+    HeaderBlock,
+    FooterBlock
   }
 };
 </script>
