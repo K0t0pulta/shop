@@ -33,7 +33,7 @@
           {{product.title}}
         </h2>
         <div class="item__form">
-          <form class="form" action="#" method="POST">
+          <form class="form" action="#" @submit.once.prevent="addToCart">
             <b class="item__price">
               {{numberFormat}} ₽
             </b>
@@ -150,17 +150,16 @@
 
             <div class="item__row">
               <div class="form__counter">
-                <button type="button" aria-label="Убрать один товар">
+                <button type="button" aria-label="Убрать один товар" @click.prevent="decreaseAmount">
                   <svg width="12" height="12" fill="currentColor">
                     <use xlink:href="#icon-minus"></use>
                   </svg>
                 </button>
                 <label for="productsForPurchase">
-                <input type="text" name="count" id="productsForPurchase">
-                {{$store.state.cartProducts.length}}
+                <input type="text" name="count" id="productsForPurchase" v-model.number="productAmount">
                 </label>
 
-                <button type="button" aria-label="Добавить один товар">
+                <button type="button" aria-label="Добавить один товар" @click.prevent="increaseAmount">
                   <svg width="12" height="12" fill="currentColor">
                     <use xlink:href="#icon-plus"></use>
                   </svg>
@@ -245,6 +244,11 @@ import categories from '@/data/categories';
 
 export default {
   name: 'ProductPage',
+  data() {
+    return {
+      productAmount: 1
+    };
+  },
   computed: {
     product() {
       return products.find((item) => item.id === +this.$route.params.id);
@@ -254,6 +258,22 @@ export default {
     },
     numberFormat() {
       return Intl.NumberFormat().format(this.product.price);
+    }
+  },
+  methods: {
+    decreaseAmount() {
+      if (this.productAmount > 1) {
+        this.productAmount -= 1;
+      }
+    },
+    increaseAmount() {
+      this.productAmount += 1;
+    },
+    addToCart() {
+      this.$store.commit(
+        'addProductToCart',
+        { productId: this.product.id, amount: this.productAmount }
+      );
     }
   }
 };

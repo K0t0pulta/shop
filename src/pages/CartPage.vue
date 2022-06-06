@@ -3,9 +3,9 @@
     <div class="content__top">
       <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
-          <a class="breadcrumbs__link" href="index.html">
+          <router-link :to="{name: 'home'}" class="breadcrumbs__link">
             Каталог
-          </a>
+          </router-link>
         </li>
         <li class="breadcrumbs__item">
           <a class="breadcrumbs__link">
@@ -18,7 +18,7 @@
         Корзина
       </h1>
       <span class="content__info">
-        3 товара
+        {{$store.state.cartProducts.length}} товара
       </span>
     </div>
 
@@ -26,50 +26,7 @@
       <form class="cart__form form" action="#" method="POST">
         <div class="cart__field">
           <ul class="cart__list">
-            <li class="cart__item product">
-              <div class="product__pic">
-                <img src="img/phone-square-3.jpg" width="120" height="120" srcset="img/phone-square-3@2x.jpg 2x" alt="Название товара">
-              </div>
-              <h3 class="product__title">
-                Смартфон Xiaomi Redmi Note 7 Pro 6/128GB
-              </h3>
-              <p class="product__info">
-                Объем: <span>128GB</span>
-              </p>
-              <span class="product__code">
-                Артикул: 1501230
-              </span>
-
-              <div class="product__counter form__counter">
-                <button type="button" aria-label="Убрать один товар">
-                  <svg width="10" height="10" fill="currentColor">
-                    <use xlink:href="#icon-minus"></use>
-                  </svg>
-                </button>
-
-                <label for="productsForPurchase">
-                <input type="text" name="count" id="productsForPurchase">
-                2
-                </label>
-
-                <button type="button" aria-label="Добавить один товар">
-                  <svg width="10" height="10" fill="currentColor">
-                    <use xlink:href="#icon-plus"></use>
-                  </svg>
-                </button>
-              </div>
-
-              <b class="product__price">
-                18 990 ₽
-              </b>
-
-              <button class="product__del button-del" type="button" aria-label="Удалить товар из корзины">
-                <svg width="20" height="20" fill="currentColor">
-                  <use xlink:href="#icon-close"></use>
-                </svg>
-              </button>
-            </li>
-
+            <CartItem v-for="item in products" :key="item.productId" :item='item'/>
           </ul>
         </div>
 
@@ -78,7 +35,7 @@
             Мы&nbsp;посчитаем стоимость доставки на&nbsp;следующем этапе
           </p>
           <p class="cart__price">
-            Итого: <span>32 970 ₽</span>
+            Итого: <span>{{priceFormat}} ₽</span>
           </p>
 
           <button class="cart__button button button--primery" type="submit">
@@ -91,5 +48,21 @@
 </template>
 
 <script>
-export default {};
+import { mapGetters } from 'vuex';
+import CartItem from '@/components/CartItem.vue';
+
+export default {
+  components: {
+    CartItem
+  },
+  computed: {
+    ...mapGetters({
+      products: 'cartDetailsProducts',
+      totalPrice: 'cartTotalPrice'
+    }),
+    priceFormat() {
+      return Intl.NumberFormat().format(this.totalPrice);
+    }
+  }
+};
 </script>
