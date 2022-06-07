@@ -146,7 +146,7 @@
 </template>
 
 <script>
-import categories from '../data/categories';
+import axios from 'axios';
 
 export default {
   props: {
@@ -159,12 +159,13 @@ export default {
     return {
       priceStart: 0,
       priceEnd: 0,
-      catID: 0
+      catID: 0,
+      categoriesData: ''
     };
   },
   computed: {
     categories() {
-      return categories;
+      return this.categoriesData ? this.categoriesData.items : [];
     }
   },
   watch: {
@@ -188,7 +189,16 @@ export default {
       this.$emit('update:priceFrom', 0);
       this.$emit('update:priceTo', 0);
       this.$emit('update:categoryID', 0);
+    },
+    loadCategories() {
+      axios.get('https://vue-study.skillbox.cc/api/productCategories')
+        .then((response) => {
+          this.categoriesData = response.data;
+        });
     }
+  },
+  mounted() {
+    this.loadCategories();
   }
 };
 </script>
