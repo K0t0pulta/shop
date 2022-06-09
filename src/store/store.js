@@ -6,10 +6,6 @@ const store = createStore({
   state() {
     return {
       cartProducts: [
-        {
-          productId: 1,
-          amount: 2
-        }
       ]
     };
   },

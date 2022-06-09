@@ -29,7 +29,7 @@
               </div>
 
               <b class="product__price">
-                 {{Intl.NumberFormat().format(item.product.price * item.amount)}} ₽
+                 {{priceFormat}} ₽
               </b>
 
               <button class="product__del button-del" type="button" aria-label="Удалить товар из корзины"
@@ -54,6 +54,9 @@ export default {
       set(value) {
         this.$store.commit('updateAmount', { productId: this.item.productId, amount: value });
       }
+    },
+    priceFormat() {
+      return Intl.NumberFormat().format(this.item.product.price * this.item.amount);
     }
   },
   methods: {
