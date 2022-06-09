@@ -11,6 +11,8 @@
     <div class="content__catalog">
       <ProductFilter v-model:priceFrom="filterPriceFrom" v-model:priceTo="filterPriceTo" v-model:categoryId="filterCategoryID"/>
         <section class="catalog">
+        <div v-if="productsLoading">Загрузка товаров...</div>
+        <div v-if="loadingFailed">Произошла ошибка <button @click.prevent="loadProducts">Try again</button></div>
           <ProductList :products="products"/>
           <BasePaginationVue v-model:page="page" :count="countProducts" :per-page="productsPerPage"/>
         </section>
@@ -39,7 +41,9 @@ export default {
       filterPriceFrom: 0,
       filterPriceTo: 0,
       filterCategoryID: 0,
-      productsData: ''
+      productsData: '',
+      productsLoading: true,
+      loadingFailed: true
     };
   },
   mounted() {
@@ -74,6 +78,8 @@ export default {
   },
   methods: {
     loadProducts() {
+      this.productsLoading = true;
+      this.loadingFailed = false;
       clearTimeout(this.loadProductsTimer);
       this.loadProductsTimer = setTimeout(() => {
         axios.get(
@@ -88,10 +94,10 @@ export default {
             }
           }
         )
-          .then((response) => {
-            (this.productsData = response.data);
-          }, 0);
-      });
+          .then((response) => { this.productsData = response.data; })
+          .catch(() => { this.loadingFailed = true; })
+          .then(() => { this.productsLoading = false; });
+      }, 2000);
     }
   }
 };

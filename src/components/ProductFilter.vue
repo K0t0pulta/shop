@@ -18,7 +18,7 @@
           <fieldset class="form__block">
             <legend class="form__legend">Категория</legend>
             <label class="form__label form__label--select" for="select-cat">
-              <select class="form__select" name="category" id="select-cat" v-model="catID">
+              <select class="form__select" name="category" id="select-cat" v-model="catId">
                 <option value="0">Все категории</option>
                 <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{cat.title}}</option>
               </select>
@@ -153,14 +153,14 @@ export default {
   props: {
     priceFrom: Number,
     priceTo: Number,
-    categoryID: Number
+    categoryId: Number
   },
-  emits: ['update:priceFrom', 'update:priceTo', 'update:categoryID'],
+  emits: ['update:priceFrom', 'update:priceTo', 'update:categoryId'],
   data() {
     return {
       priceStart: 0,
       priceEnd: 0,
-      catID: 0,
+      catId: 0,
       categoriesData: ''
     };
   },
@@ -176,20 +176,20 @@ export default {
     priceTo(value) {
       this.priceEnd = value;
     },
-    categoryID(value) {
-      this.catID = value;
+    categoryId(value) {
+      this.catId = value;
     }
   },
   methods: {
     submit() {
       this.$emit('update:priceFrom', this.priceStart);
       this.$emit('update:priceTo', this.priceEnd);
-      this.$emit('update:categoryID', this.catID);
+      this.$emit('update:categoryId', this.catId);
     },
     reset() {
       this.$emit('update:priceFrom', 0);
       this.$emit('update:priceTo', 0);
-      this.$emit('update:categoryID', 0);
+      this.$emit('update:categoryId', 0);
     },
     loadCategories() {
       axios.get(`${API_BASE_URL}/api/productCategories`)
