@@ -23,6 +23,7 @@ import ProductList from '@/components/ProductList.vue';
 import BasePaginationVue from '@/components/BasePagination.vue';
 import ProductFilter from '@/components/ProductFilter.vue';
 import axios from 'axios';
+import API_BASE_URL from '@/config';
 
 export default {
   name: 'MainPage',
@@ -34,7 +35,7 @@ export default {
   data() {
     return {
       page: 1,
-      productsPerPage: 3,
+      productsPerPage: 6,
       filterPriceFrom: 0,
       filterPriceTo: 0,
       filterCategoryID: 0,
@@ -46,6 +47,15 @@ export default {
   },
   watch: {
     page() {
+      this.loadProducts();
+    },
+    filterPriceFrom() {
+      this.loadProducts();
+    },
+    filterPriceTo() {
+      this.loadProducts();
+    },
+    filterCategoryID() {
       this.loadProducts();
     }
   },
@@ -64,21 +74,24 @@ export default {
   },
   methods: {
     loadProducts() {
-      axios.get(
-        'https://vue-study.skillbox.cc/api/products',
-        {
-          params: {
-            page: this.page,
-            limit: this.productsPerPage,
-            categoryId: this.filterCategoryID,
-            minPrice: this.filterPriceFrom,
-            maxPrice: this.filterPriceTo
+      clearTimeout(this.loadProductsTimer);
+      this.loadProductsTimer = setTimeout(() => {
+        axios.get(
+          `${API_BASE_URL}/api/products`,
+          {
+            params: {
+              page: this.page,
+              limit: this.productsPerPage,
+              categoryId: this.filterCategoryID,
+              minPrice: this.filterPriceFrom,
+              maxPrice: this.filterPriceTo
+            }
           }
-        }
-      )
-        .then((response) => {
-          (this.productsData = response.data);
-        });
+        )
+          .then((response) => {
+            (this.productsData = response.data);
+          }, 0);
+      });
     }
   }
 };

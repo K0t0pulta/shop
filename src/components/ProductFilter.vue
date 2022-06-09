@@ -147,6 +147,7 @@
 
 <script>
 import axios from 'axios';
+import API_BASE_URL from '@/config';
 
 export default {
   props: {
@@ -191,7 +192,7 @@ export default {
       this.$emit('update:categoryID', 0);
     },
     loadCategories() {
-      axios.get('https://vue-study.skillbox.cc/api/productCategories')
+      axios.get(`${API_BASE_URL}/api/productCategories`)
         .then((response) => {
           this.categoriesData = response.data;
         });
