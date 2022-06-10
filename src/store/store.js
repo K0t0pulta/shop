@@ -87,12 +87,13 @@ const store = createStore({
         context.commit('syncCartProducts');
       }
     },
-    async deleteCartProduct(context, productId) {
+    async deleteProduct(context, productId) {
       const response = await axios.delete(`${API_BASE_URL}/api/baskets/products`, {
-        productId
-      }, {
         params: {
           userAccessKey: context.state.userAccessKey
+        },
+        data: {
+          productId
         }
       });
       context.commit('updateCartProductsData', response.data.items);
