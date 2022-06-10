@@ -1,5 +1,5 @@
 <template>
-      <main class="content container">
+  <main class="content container">
     <div class="content__top">
       <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
@@ -17,10 +17,11 @@
       <h1 class="content__title">
         Корзина
       </h1>
-      <span class="content__info">
+      <span class="content__info" v-if="$store.state.cartProducts.length">
         {{$store.state.cartProducts.length}} товара
       </span>
     </div>
+    <div v-if="!$store.state.cartProducts.length"> Вы ещё ничего не добавили в корзину. Ждём ваших покупок.</div>
 
     <section class="cart">
       <form class="cart__form form" action="#" method="POST">
@@ -30,7 +31,7 @@
           </ul>
         </div>
 
-        <div class="cart__block">
+        <div class="cart__block" v-if="$store.state.cartProducts.length">
           <p class="cart__desc">
             Мы&nbsp;посчитаем стоимость доставки на&nbsp;следующем этапе
           </p>
