@@ -198,7 +198,7 @@ export default {
         });
     }
   },
-  mounted() {
+  created() {
     this.loadCategories();
   }
 };
