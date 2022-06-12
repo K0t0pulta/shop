@@ -36,7 +36,7 @@
                     Получатель
                   </span>
                   <span class="dictionary__value">
-                    {{this.$store.state.orderInfo.name}}
+                    {{$store.state.orderInfo.name}}
                   </span>
                 </li>
                 <li class="dictionary__item">
@@ -44,7 +44,7 @@
                     Адрес доставки
                   </span>
                   <span class="dictionary__value">
-                    {{this.$store.state.orderInfo.address}}
+                    {{$store.state.orderInfo.address}}
                   </span>
                 </li>
                 <li class="dictionary__item">
@@ -52,7 +52,7 @@
                     Телефон
                   </span>
                   <span class="dictionary__value">
-                    {{this.$store.state.orderInfo.phone}}
+                    {{$store.state.orderInfo.phone}}
                   </span>
                 </li>
                 <li class="dictionary__item">
@@ -60,7 +60,7 @@
                     Email
                   </span>
                   <span class="dictionary__value">
-                    {{this.$store.state.orderInfo.email}}
+                    {{$store.state.orderInfo.email}}
                   </span>
                 </li>
                 <li class="dictionary__item">
@@ -75,25 +75,11 @@
             </div>
             <div class="cart__block">
               <ul class="cart__orders">
-                <li class="cart__order">
-                  <h3>Смартфон Xiaomi Redmi Note 7 Pro 6/128GB</h3>
-                  <b>18 990 ₽</b>
-                  <span>Артикул: 150030</span>
-                </li>
-                <li class="cart__order">
-                  <h3>Гироскутер Razor Hovertrax 2.0ii</h3>
-                  <b>4 990 ₽</b>
-                  <span>Артикул: 150030</span>
-                </li>
-                <li class="cart__order">
-                  <h3>Электрический дрифт-карт Razor Lil’ Crazy</h3>
-                  <b>8 990 ₽</b>
-                  <span>Артикул: 150030</span>
-                </li>
+                <order-item  v-for="item in $store.state.orderInfo.basket.items" :key="item.id" :item="item"/>
               </ul>
               <div class="cart__total">
                 <p>Доставка: <b>500 ₽</b></p>
-                <p>Итого: <b>3</b> товара на сумму <b>37 970 ₽</b></p>
+                <p>Итого: <b>3</b> товара на сумму <b>{{priceFormat}} ₽</b></p>
               </div>
             </div>
           </form>
@@ -106,15 +92,22 @@
 
 <script>
 import BasePreloader from '@/components/BasePreloader.vue';
+import OrderItem from '@/components/OrderItem.vue';
 
 export default {
   components: {
-    BasePreloader
+    BasePreloader,
+    OrderItem
   },
   data() {
     return {
       dataLoading: false
     };
+  },
+  computed: {
+    priceFormat() {
+      return Intl.NumberFormat().format(this.$store.state.orderInfo.totalPrice);
+    }
   },
   created() {
     if (this.$store.state.orderInfo && this.$store.state.orderInfo.od === this.$route.params.id) return;

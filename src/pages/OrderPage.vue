@@ -89,25 +89,11 @@
 
         <div class="cart__block">
           <ul class="cart__orders">
-            <li class="cart__order">
-              <h3>Смартфон Xiaomi Redmi Note 7 Pro 6/128GB</h3>
-              <b>18 990 ₽</b>
-              <span>Артикул: 150030</span>
-            </li>
-            <li class="cart__order">
-              <h3>Гироскутер Razor Hovertrax 2.0ii</h3>
-              <b>4 990 ₽</b>
-              <span>Артикул: 150030</span>
-            </li>
-            <li class="cart__order">
-              <h3>Электрический дрифт-карт Razor Lil’ Crazy</h3>
-              <b>8 990 ₽</b>
-              <span>Артикул: 150030</span>
-            </li>
+            <order-item v-for="item in products" :key="item.id" :item="item"/>
           </ul>
           <div class="cart__total">
             <p>Доставка: <b>500 ₽</b></p>
-            <p>Итого: <b>3</b> товара на сумму <b>37 970 ₽</b></p>
+            <p>Итого: <b>3</b> товара на сумму <b>{{priceFormat}} ₽</b></p>
           </div>
 
           <button class="cart__button button button--primery" type="submit">
@@ -128,13 +114,16 @@
 <script>
 import BaseFormText from '@/components/BaseFormText.vue';
 import BaseFormTextarea from '@/components/BaseFormTextarea.vue';
+import OrderItem from '@/components/OrderItem.vue';
 import axios from 'axios';
 import API_BASE_URL from '@/config';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
     BaseFormText,
-    BaseFormTextarea
+    BaseFormTextarea,
+    OrderItem
   },
   data() {
     return {
@@ -142,6 +131,15 @@ export default {
       formError: {},
       formErrorMessage: ''
     };
+  },
+  computed: {
+    ...mapGetters({
+      products: 'cartDetailsProducts',
+      totalPrice: 'cartTotalPrice'
+    }),
+    priceFormat() {
+      return Intl.NumberFormat().format(this.totalPrice);
+    }
   },
   methods: {
     order() {
