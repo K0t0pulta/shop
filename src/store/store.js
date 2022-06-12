@@ -8,10 +8,18 @@ const store = createStore({
     return {
       cartProducts: [],
       userAccessKey: '',
-      cartProductsData: []
+      cartProductsData: [],
+      orderInfo: ''
     };
   },
   mutations: {
+    updateOrderInfo(state, orderData) {
+      state.orderInfo = orderData;
+    },
+    resetCart(state) {
+      state.cartProducts = [];
+      state.cartProductsData = [];
+    },
     updateAmount(state, { productId, amount }) {
       const product = state.cartProducts.find((item) => item.productId === productId);
       if (product) {
@@ -46,6 +54,16 @@ const store = createStore({
     }
   },
   actions: {
+    async loadOrderInfo(context, orderId) {
+      axios.get(`${API_BASE_URL}/api/orders/${orderId}`, {
+        params: {
+          userAccessKey: context.state.userAccessKey
+        }
+      })
+        .then((response) => {
+          context.commit('updateOrderInfo', response.data);
+        });
+    },
     async loadCart(context) {
       const response = await axios.get(`${API_BASE_URL}/api/baskets`, {
         params: {

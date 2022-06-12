@@ -54,6 +54,17 @@
       "linebreak-style": [
         "error",
         "windows"
+      ],
+      "vuejs-accessibility/label-has-for": [
+        "error",
+        {
+          "components": ["VLabel"],
+          "controlComponents": ["VInput"],
+          "required": {
+            "every": ["nesting", "id"]
+          },
+          "allowChildren": true
+        }
       ]
     }
   },

@@ -11,19 +11,20 @@
     <div class="content__catalog">
       <ProductFilter v-model:priceFrom="filterPriceFrom" v-model:priceTo="filterPriceTo" v-model:categoryId="filterCategoryID"/>
         <section class="catalog">
-        <div v-if="productsLoading">Загрузка товаров...</div>
+        <base-preloader v-if="productsLoading"/>
         <div v-if="loadingFailed">Произошла ошибка <button @click.prevent="loadProducts">Try again</button></div>
-          <ProductList :products="products"/>
-          <BasePaginationVue v-model:page="page" :count="countProducts" :per-page="productsPerPage"/>
+        <ProductList :products="products"/>
+        <BasePaginationVue v-model:page="page" :count="countProducts" :per-page="productsPerPage"/>
         </section>
     </div>
   </main>
-  </template>
+</template>
 
 <script>
 import ProductList from '@/components/ProductList.vue';
 import BasePaginationVue from '@/components/BasePagination.vue';
 import ProductFilter from '@/components/ProductFilter.vue';
+import BasePreloader from '@/components/BasePreloader.vue';
 import axios from 'axios';
 import API_BASE_URL from '@/config';
 
@@ -32,7 +33,8 @@ export default {
   components: {
     ProductList,
     ProductFilter,
-    BasePaginationVue
+    BasePaginationVue,
+    BasePreloader
   },
   data() {
     return {
@@ -97,7 +99,7 @@ export default {
           .then((response) => { this.productsData = response.data; })
           .catch(() => { this.loadingFailed = true; })
           .then(() => { this.productsLoading = false; });
-      }, 1000);
+      }, 2000);
     }
   }
 };
