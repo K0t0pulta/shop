@@ -21,7 +21,7 @@ export default {
       this.$emit('update:open', false);
     },
     outsideClick($event) {
-      if ($event.target !== this.$refs.content && $event.target.contains(this.refs.content)) {
+      if ($event.target !== this.$refs.content && $event.target.contains(this.$refs.content)) {
         this.doClose();
       }
     }

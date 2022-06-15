@@ -28,7 +28,6 @@
           <img width="570" height="570" :src="product.image.file.url" :alt="product.title">
         </div>
       </div>
-
       <div class="item__info">
         <span class="item__code">Артикул: {{product.id}}</span>
         <h2 class="item__title">
@@ -39,7 +38,6 @@
             <b class="item__price">
               {{numberFormat}} ₽
             </b>
-
           <fieldset class="form__block">
             <legend class="form__legend">Цвет</legend>
             <ul class="colors">
@@ -89,7 +87,6 @@
               </li>
             </ul>
           </fieldset>
-
           <fieldset class="form__block">
             <legend class="form__legend">Объемб в ГБ</legend>
             <ul class="check-list">
@@ -149,7 +146,6 @@
               </li>
             </ul>
           </fieldset>
-
             <div class="item__row">
               <div class="form__counter">
                 <button type="button" aria-label="Убрать один товар" @click.prevent="decreaseAmount">
@@ -167,7 +163,6 @@
                   </svg>
                 </button>
               </div>
-
               <button class="button button--primery" type="submit" :disabled="productAddSending">
                 В корзину
               </button>
@@ -291,6 +286,7 @@ export default {
     addToCart() {
       this.productAdded = false;
       this.productAddSending = true;
+      this.isShowAddedMessage = true;
       this.addProductToCart({ productId: this.product.id, amount: this.productAmount })
         .then(() => {
           this.productAdded = true;
@@ -300,7 +296,6 @@ export default {
     loadProduct() {
       this.productLoading = true;
       this.loadingFailed = false;
-      this.isShowAddedMessage = true;
       axios.get(
         `${API_BASE_URL}/api/products/${this.$route.params.id}`
       )
