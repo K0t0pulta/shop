@@ -1,5 +1,5 @@
 <template>
-  <li class="catalog__item" >
+  <li class="catalog__item" v-bind="$attrs" v-for="product in productsNormalize" :key="product.id">
     <router-link class="catalog__pic" :to="{name: 'product', params: {id: product.id}}">
       <img :src="product.img" :alt="product.title">
     </router-link>
@@ -9,7 +9,7 @@
     </a>
     </h3>
     <span class="catalog__price">
-        {{numberFormat}}  ₽
+        {{product.priceFormat}}  ₽
     </span>
     <ColorPicker :product="product"/>
   </li>
@@ -17,16 +17,20 @@
 
 <script>
 import ColorPicker from '@/components/ColorPicker.vue';
+import { defineComponent } from 'vue';
 
-export default {
-  props: ['product'],
+export default defineComponent({
+  props: ['products'],
   components: {
     ColorPicker
   },
   computed: {
-    numberFormat() {
-      return Intl.NumberFormat().format(this.product.price);
+    productsNormalize() {
+      return this.products.map((product) => ({
+        ...product,
+        priceFormat: Intl.NumberFormat().format(product.price)
+      }));
     }
   }
-};
+});
 </script>

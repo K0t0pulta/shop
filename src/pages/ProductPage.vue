@@ -1,5 +1,4 @@
 <template>
-
   <div v-if="productLoading"> Данные о продукте загружаются </div>
   <div v-else-if="!productData"> Не удалось загрузить товар </div>
   <div v-if="loadingFailed"> Ошибка загрузки </div>
@@ -172,9 +171,12 @@
               <button class="button button--primery" type="submit" :disabled="productAddSending">
                 В корзину
               </button>
-            </div>
+              <BaseModal v-model:open="isShowAddedMessage">
+                Товар успешно добавлен в корзину
+              </BaseModal>
             <div v-show="productAdded">Товар успешно добавлен в корзину</div>
             <div v-show="productAddSending">Добавляем товар в корзину...</div>
+            </div>
           </form>
         </div>
       </div>
@@ -247,9 +249,13 @@
 import API_BASE_URL from '@/config';
 import axios from 'axios';
 import { mapActions } from 'vuex';
+import BaseModal from '@/components/BaseModal.vue';
 
 export default {
   name: 'ProductPage',
+  components: {
+    BaseModal
+  },
   data() {
     return {
       productAmount: 1,
@@ -257,7 +263,8 @@ export default {
       productLoading: true,
       loadingFailed: false,
       productAdded: false,
-      productAddSending: false
+      productAddSending: false,
+      isShowAddedMessage: false
     };
   },
   computed: {
@@ -293,6 +300,7 @@ export default {
     loadProduct() {
       this.productLoading = true;
       this.loadingFailed = false;
+      this.isShowAddedMessage = true;
       axios.get(
         `${API_BASE_URL}/api/products/${this.$route.params.id}`
       )

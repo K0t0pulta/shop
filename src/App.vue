@@ -1,7 +1,8 @@
 <template>
-  <div><HeaderBlock/></div>
+  <HeaderBlock/>
   <router-view></router-view>
-  <div><FooterBlock/></div>
+  <FooterBlock/>
+  <div id="teleport-target"></div>
 </template>
 
 <script>

@@ -10,7 +10,8 @@
                 Артикул: {{item.productId}}
               </span>
               <div class="product__counter form__counter">
-                <button type="button" aria-label="Убрать один товар" @click.prevent="amount > 1 ? amount -= 1 : amount = amount">
+                <button type="button" aria-label="Убрать один товар"
+                @click.prevent="amount > 1 ? amount -= 1 : amount = amount">
                   <svg width="10" height="10" fill="currentColor">
                     <use xlink:href="#icon-minus"></use>
                   </svg>
@@ -20,7 +21,8 @@
                 <input type="text" name="count" id="productsForPurchase" v-model="amount">
                 </label>
 
-                <button type="button" aria-label="Добавить один товар" @click.prevent="amount += 1">
+                <button type="button" aria-label="Добавить один товар"
+                @click.prevent="amount += 1">
                   <svg width="10" height="10" fill="currentColor">
                     <use xlink:href="#icon-plus"></use>
                   </svg>
@@ -57,7 +59,7 @@ export default {
       }
     },
     priceFormat() {
-      return Intl.NumberFormat().format(this.item.product.price * this.item.amount);
+      return Intl.NumberFormat().format(this.item.amount * this.item.product.price);
     }
   },
   methods: {

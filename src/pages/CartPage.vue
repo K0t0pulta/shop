@@ -27,7 +27,7 @@
       <form class="cart__form form" action="#" method="POST">
         <div class="cart__field">
           <ul class="cart__list">
-            <CartItem v-for="item in products" :key="item.productId" :item='item'/>
+            <CartItem :item='item' v-for="item in products" :key="item.productId"/>
           </ul>
         </div>
 
@@ -39,8 +39,9 @@
             Итого: <span>{{priceFormat}} ₽</span>
           </p>
 
-          <router-link :to="{name: 'order'}">
-            <button class="cart__button button button--primery" type="submit">
+          <router-link v-slot="{navigate}" :to="{name: 'order'}" custom>
+            <button class="cart__button button button--primery" type="submit"
+            @click="navigate">
               Оформить заказ
             </button>
           </router-link>
@@ -53,8 +54,9 @@
 <script>
 import { mapGetters } from 'vuex';
 import CartItem from '@/components/CartItem.vue';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
   components: {
     CartItem
   },
@@ -67,5 +69,5 @@ export default {
       return Intl.NumberFormat().format(this.totalPrice);
     }
   }
-};
+});
 </script>

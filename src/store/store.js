@@ -3,7 +3,7 @@ import { createStore } from 'vuex';
 import axios from 'axios';
 import API_BASE_URL from '@/config';
 
-const store = createStore({
+export default createStore({
   state() {
     return {
       cartProducts: [],
@@ -119,5 +119,3 @@ const store = createStore({
     }
   }
 });
-
-export default store;
