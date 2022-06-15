@@ -1,6 +1,6 @@
 <template>
   <HeaderBlock/>
-  <router-view></router-view>
+  <router-view :key="$route.fullPath"></router-view>
   <FooterBlock/>
   <div id="teleport-target"></div>
 </template>

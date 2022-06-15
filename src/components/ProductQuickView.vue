@@ -2,7 +2,7 @@
   <div v-if="productLoading"> Данные о продукте загружаются </div>
   <div v-else-if="!productData"> Не удалось загрузить товар </div>
   <div v-if="loadingFailed"> Ошибка загрузки </div>
-  <main class="content container" v-if="productData">
+  <div v-if="productData">
     <div class="content__top">
       <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
@@ -34,7 +34,7 @@
           {{product.title}}
         </h2>
         <div class="item__form">
-          <form class="form" action="#" @submit.once.prevent="doAddToCart">
+          <form class="form" action="#" @submit.once.prevent="addToCart">
             <b class="item__price">
               {{numberFormat}} ₽
             </b>
@@ -148,7 +148,7 @@
           </fieldset>
             <div class="item__row">
               <div class="form__counter">
-                <button type="button" aria-label="Убрать один товар" @click.prevent="doDecreaseAmount">
+                <button type="button" aria-label="Убрать один товар" @click.prevent="decreaseAmount">
                   <svg width="12" height="12" fill="currentColor">
                     <use xlink:href="#icon-minus"></use>
                   </svg>
@@ -157,7 +157,7 @@
                 <input type="text" name="count" id="productsForPurchase" v-model.number="productAmount">
                 </label>
 
-                <button type="button" aria-label="Добавить один товар" @click.prevent="doIncreaseAmount">
+                <button type="button" aria-label="Добавить один товар" @click.prevent="increaseAmount">
                   <svg width="12" height="12" fill="currentColor">
                     <use xlink:href="#icon-plus"></use>
                   </svg>
@@ -166,9 +166,7 @@
               <button class="button button--primery" type="submit" :disabled="productAddSending">
                 В корзину
               </button>
-              <BaseModal v-model:open="isShowAddedMessage">
-                Товар успешно добавлен в корзину
-              </BaseModal>
+
             <div v-show="productAdded">Товар успешно добавлен в корзину</div>
             <div v-show="productAddSending">Добавляем товар в корзину...</div>
             </div>
@@ -237,84 +235,83 @@
         </div>
       </div>
     </section>
-  </main>
+  </div>
 </template>
 
 <script>
 import API_BASE_URL from '@/config';
 import axios from 'axios';
-import { useStore } from 'vuex';
-import BaseModal from '@/components/BaseModal.vue';
-import {
-  computed, defineComponent, ref
-} from 'vue';
-import { useRoute } from 'vue-router';
+import { mapActions } from 'vuex';
 
-export default defineComponent({
-  components: {
-    BaseModal
+export default {
+  name: 'ProductQuickView',
+  props: {
+    productId: {
+      type: [String, Number],
+      required: true
+    }
   },
-  setup() {
-    const $route = useRoute();
-    const $store = useStore();
-
-    const productAmount = ref(1);
-    const productData = ref(null);
-    const productLoading = ref(true);
-    const loadingFailed = ref(false);
-    const productAdded = ref(false);
-    const productAddSending = ref(false);
-    const isShowAddedMessage = ref(false);
-    const product = computed(() => productData.value);
-    const category = computed(() => productData.value.category);
-    const numberFormat = computed(() => Intl.NumberFormat().format(product.value.price));
-    function doDecreaseAmount() {
-      if (productAmount.value > 1) {
-        productAmount.value -= 1;
-      }
-    }
-    function doIncreaseAmount() {
-      productAmount.value += 1;
-    }
-    function doAddToCart() {
-      productAdded.value = false;
-      productAddSending.value = true;
-      isShowAddedMessage.value = true;
-      $store.dispatch('addProductToCart', { productId: product.value.id, amount: productAmount.value })
-        .then(() => {
-          productAdded.value = true;
-          productAddSending.value = false;
-        });
-    }
-    function doLoadProduct() {
-      productLoading.value = true;
-      loadingFailed.value = false;
-      axios.get(
-        `${API_BASE_URL}/api/products/${$route.params.id}`
-      )
-        .then((response) => { productData.value = response.data; })
-        .catch(() => { loadingFailed.value = false; })
-        .then(() => { productLoading.value = false; });
-    }
-    doLoadProduct();
+  data() {
     return {
-      doLoadProduct,
-      doAddToCart,
-      doIncreaseAmount,
-      doDecreaseAmount,
-      productAmount,
-      productData,
-      productLoading,
-      loadingFailed,
-      productAdded,
-      productAddSending,
-      isShowAddedMessage,
-      product,
-      category,
-      numberFormat
+      productAmount: 1,
+      productData: '',
+      productLoading: true,
+      loadingFailed: false,
+      productAdded: false,
+      productAddSending: false,
+      isShowAddedMessage: false
     };
+  },
+  computed: {
+    product() {
+      return this.productData;
+    },
+    category() {
+      return this.productData.category;
+    },
+    numberFormat() {
+      return Intl.NumberFormat().format(this.product.price);
+    }
+  },
+  methods: {
+    ...mapActions(['addProductToCart']),
+    decreaseAmount() {
+      if (this.productAmount > 1) {
+        this.productAmount -= 1;
+      }
+    },
+    increaseAmount() {
+      this.productAmount += 1;
+    },
+    addToCart() {
+      this.productAdded = false;
+      this.productAddSending = true;
+      this.isShowAddedMessage = true;
+      this.addProductToCart({ productId: this.product.id, amount: this.productAmount })
+        .then(() => {
+          this.productAdded = true;
+          this.productAddSending = false;
+        });
+    },
+    loadProduct() {
+      this.productLoading = true;
+      this.loadingFailed = false;
+      axios.get(
+        `${API_BASE_URL}/api/products/${this.productId}`
+      )
+        .then((response) => { this.productData = response.data; })
+        .catch(() => { this.loadingFailed = false; })
+        .then(() => { this.productLoading = false; });
+    }
+  },
+  created() {
+    this.loadProduct();
   }
-
-});
-
+};
 </script>
+
+<style scoped>
+    .item {
+        grid-template-columns: 1fr;
+    }
+</style>
